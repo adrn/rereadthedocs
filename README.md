@@ -7,7 +7,7 @@ This #AstroHackWeek community hack project uses [documentation sentiment analysi
 
 Some intermediary goals are:
 * Compare sentiments of subdocs of subpackages with in astropy to see if they are uniform (probably not!) and explore the differences
-* Use the results to poll [Astro Hack Week participants] (https://goo.gl/forms/vhl9Xrujfjhrl6262) and define what kinds of documentation language are the most user-friendly
+* Use the results to poll [Astro Hack Week participants](https://goo.gl/forms/vhl9Xrujfjhrl6262) and define what kinds of documentation language are the most user-friendly
 * Write a script that can run on any Sphinx documentation build to analyze user-friendliness
 * Based on the output of the script, provide concrete feedback to developers about how their documentation could be changed to be more user-friendly
 
