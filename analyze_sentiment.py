@@ -1,6 +1,7 @@
 import urllib
 from bs4 import BeautifulSoup
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
+from nltk import tokenize
 '''
 Do sentiment analysis on text scraped from a list of websites.
 
@@ -16,6 +17,10 @@ def text_from_url(url):
     return text
 
 def measure_sentiment(text):
+    '''
+    Input: one sentence or small chunk of text
+    Result: dict with scores
+    '''
     vader = SentimentIntensityAnalyzer()
     score = vader.polarity_scores(text)
     return score
@@ -49,7 +54,11 @@ astropydocs = ['http://docs.astropy.org/en/stable/constants/index.html',
                'http://docs.astropy.org/en/stable/development/workflow/get_devel_version.html']
 
 for doc in astropydocs:
-    #print(doc)
-    result = measure_sentiment(text_from_url(doc))
-    print(doc[34:-11], result['compound'])
+    result = 0
+    webtext = text_from_url(doc)
+    sentences = tokenize.sent_tokenize(webtext)
+    for sentence in sentences:
+        score = measure_sentiment(sentence)
+        result += score['compound']
+    print(doc[34:-11], result)
 
