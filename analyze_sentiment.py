@@ -2,6 +2,8 @@ import urllib
 from bs4 import BeautifulSoup
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from nltk import tokenize
+import matplotlib.pyplot as plt
+import numpy as np
 '''
 Do sentiment analysis on text scraped from a list of websites.
 
@@ -25,7 +27,8 @@ def measure_sentiment(text):
     score = vader.polarity_scores(text)
     return score
 
-astropydocs = ['http://docs.astropy.org/en/stable/constants/index.html',
+astropydocs = [
+               'http://docs.astropy.org/en/stable/constants/index.html',
                'http://docs.astropy.org/en/stable/units/index.html',
                'http://docs.astropy.org/en/stable/nddata/index.html',
                'http://docs.astropy.org/en/stable/table/index.html',
@@ -51,14 +54,31 @@ astropydocs = ['http://docs.astropy.org/en/stable/constants/index.html',
                'http://docs.astropy.org/en/stable/warnings.html',
                'http://docs.astropy.org/en/stable/utils/index.html',
                'http://docs.astropy.org/en/stable/testhelpers.html',
-               'http://docs.astropy.org/en/stable/development/workflow/get_devel_version.html']
+               #'http://docs.astropy.org/en/stable/development/workflow/get_devel_version.html']
+               ]
 
+allnames = []
+allresults = []
 for doc in astropydocs:
+    if 'index' in doc:
+        name = doc[34:-11]
+    else:
+        name = doc[34:-5]
     result = 0
     webtext = text_from_url(doc)
     sentences = tokenize.sent_tokenize(webtext)
     for sentence in sentences:
         score = measure_sentiment(sentence)
         result += score['compound']
-    print(doc[34:-11], result)
+    result = result/len(sentences)
+    print(name, result)
+    allnames.append(name)
+    allresults.append(result)
 
+fig, ax = plt.subplots()
+y_pos = np.arange(len(allnames))
+ax.barh(y_pos, allresults, align='center', color='steelblue')
+ax.set_yticks(y_pos)
+ax.set_yticklabels(allnames, size='small')
+ax.set_xlabel('Compound score')
+plt.show()
